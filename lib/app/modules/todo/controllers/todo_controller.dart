@@ -34,9 +34,9 @@ class TodoController extends GetxController {
      "title":title,
      "description":desc,
      "isPinned":isPinned,
-     "reminder":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder as DateTime),
+     "reminder":reminder==DateTime.now()?null: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder),
      "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
-     "updatedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
+     "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isAddingTodo.value=false;
     Get.rawSnackbar(title: "todo",message: "todo added successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
@@ -47,14 +47,15 @@ class TodoController extends GetxController {
    });
  }
 
- Future<void> updateTodo(Map<dynamic,dynamic> todo)async{
+ Future<void> updateTodo(Map<dynamic,dynamic> todo,DateTime updatedReminder)async{
    isUpdatingTodo.value=true;
    DatabaseReference ref = FirebaseDatabase.instance.ref("todos/${todo['id']}");
    await ref.update({
      "title":todo['title'],
      "description":todo['description'],
      "isPinned":todo['isPinned'],
-     "updatedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
+     "reminder":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(updatedReminder)==todo['reminder']?null: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(updatedReminder),
+     "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isUpdatingTodo.value=false;
    Get.rawSnackbar(title: "update",message: "todo updated successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);

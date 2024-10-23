@@ -24,7 +24,36 @@ class TodoDetailView extends GetView<TodoController>{
           IconButton(onPressed:(){
               controller.isTodoPinned.value=!controller.isTodoPinned.value;
           } , icon:controller.isTodoPinned.value?const Icon(Icons.push_pin):const Icon(Icons.push_pin_outlined)),),
-          IconButton(onPressed:(){} , icon:const Icon(Icons.alarm)),
+          IconButton(
+              onPressed: () async {
+                DateTime? selected = await showDatePicker(
+                  context: context,
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2040),
+                );
+                if (selected != null) {
+                  final TimeOfDay? pickedTime =
+                  await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (pickedTime != null) {
+                    var selectedDateTime = DateTime(
+                      selected.year,
+                      selected.month,
+                      selected.day,
+                      pickedTime.hour,
+                      pickedTime.minute,
+                    );
+                    controller.reminderTime.value =
+                        selectedDateTime;
+                  }
+                }
+              },
+              icon: const Icon(
+                Icons.alarm,
+                size: 16,
+              )),
           IconButton(onPressed:(){} , icon:const Icon(Icons.archive_outlined)),
           IconButton(onPressed:(){controller.deleteTodo(todo);} , icon:const Icon(Icons.delete)),
         ],
@@ -39,8 +68,8 @@ class TodoDetailView extends GetView<TodoController>{
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
                     children: [
-                      const Text("UpdatedAt: ",style:TextStyle(fontSize: 12),),
-                      Text(todo['updatedAt'],style:const TextStyle(fontSize: 11),),
+                      const Text("EditedAt: ",style:TextStyle(fontSize: 12),),
+                      Text(todo['editedAt'],style:const TextStyle(fontSize: 11),),
                     ],
                   ),
                 ),
@@ -97,7 +126,7 @@ class TodoDetailView extends GetView<TodoController>{
                         todo['title']=_titleController.text;
                         todo['description']=_descController.text;
                         todo['isPinned']=controller.isTodoPinned.value;
-                        controller.updateTodo(todo);
+                        controller.updateTodo(todo,controller.reminderTime.value);
                       }
                     },
                         style: ElevatedButton.styleFrom(padding:const EdgeInsets.all(16)),

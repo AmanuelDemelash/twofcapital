@@ -1,3 +1,4 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:twofcapital/app/modules/auth/views/sign_up_view.dart';
@@ -9,9 +10,11 @@ class AddTodoView extends GetView<TodoController> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  late Color dialogSelectColor;
   @override
   Widget build(BuildContext context) {
     Get.put(TodoController());
+    dialogSelectColor = const Color(0xFFA239CA);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Todo'),
@@ -108,6 +111,50 @@ class AddTodoView extends GetView<TodoController> {
                                   Icons.alarm,
                                   size: 16,
                                 )),
+                            ColorIndicator(
+                              width: 20,
+                              height:20,
+                              borderRadius: 4,
+                             selectedRequestsFocus: true,
+                             color:dialogSelectColor,
+                              onSelectFocus: false,
+                              onSelect: () async {
+                                // Store current color before we open the dialog.
+                                final Color newColor = await showColorPickerDialog(
+                                  context,
+                                  dialogSelectColor,
+                                  title: Text('ColorPicker',
+                                      style: Theme.of(context).textTheme.bodySmall),
+                                  width: 40,
+                                  height: 40,
+                                  spacing: 0,
+                                  runSpacing: 0,
+                                  borderRadius: 0,
+                                  wheelDiameter: 165,
+                                  enableOpacity: true,
+                                  showColorCode: true,
+                                  colorCodeHasColor: true,
+                                  pickersEnabled: <ColorPickerType, bool>{
+                                    ColorPickerType.wheel: true,
+                                  },
+                                  copyPasteBehavior: const ColorPickerCopyPasteBehavior(
+                                    copyButton: true,
+                                    pasteButton: true,
+                                    longPressMenu: true,
+                                  ),
+                                  actionButtons: const ColorPickerActionButtons(
+                                    okButton: true,
+                                    closeButton: true,
+                                    dialogActionButtons: false,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                      minHeight: 480, minWidth: 320, maxWidth: 320),
+                                );
+                                dialogSelectColor=newColor;
+                                print(dialogSelectColor);
+
+                              },
+                            ),
                           ],
                         )
                       ],

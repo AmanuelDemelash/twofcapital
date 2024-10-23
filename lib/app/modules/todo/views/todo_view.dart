@@ -1,3 +1,4 @@
+import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class TodoView extends GetView<TodoController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("What`s up",style: TextStyle(fontSize: 20),),
+                    const Text("Welcome Back!",style: TextStyle(fontSize: 20),),
                     Text(controller.user.displayName!.toUpperCase(),style: const TextStyle(fontSize: 24),),
                   ],
                 ),
@@ -120,7 +121,7 @@ class TodoView extends GetView<TodoController> {
                                     Text(todos[index]['description'],textAlign: TextAlign.start,style:const TextStyle(fontSize: 11)),
                                     todos[index]['reminder']!=null?Container(
                                       padding:const EdgeInsets.all(5),
-                                      margin:const EdgeInsets.only(top: 10),
+                                      margin:const EdgeInsets.only(top: 10,bottom: 10),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(100),
                                           border:Border.all(color: Colors.white.withOpacity(0.2))
@@ -128,14 +129,22 @@ class TodoView extends GetView<TodoController> {
                                         child: Row(
                                           children: [
                                             const Icon(Icons.watch_later_outlined,size: 12,),
-                                            Text(todos[index]['reminder']??"",style:const TextStyle(fontSize: 11),),
+                                            Text(todos[index]['reminder'].toString().substring(12),style:const TextStyle(fontSize: 11),),
                                           ],
                                         )):const Text(""),
-                                    Divider(color: Colors.white.withOpacity(0.2),),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  
+                                    const Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Icon(Icons.more_vert,size: 15,)
+                                        AvatarStack(
+                                          width: 43,
+                                          height:30,
+                                          avatars: [
+                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
+                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
+                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
+                                          ],
+                                        ),
                                       ],
                                     )
 
