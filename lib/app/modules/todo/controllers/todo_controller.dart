@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:twofcapital/app/modules/auth/views/sign_up_view.dart';
 import 'package:twofcapital/app/routes/app_pages.dart';
 
@@ -31,7 +32,9 @@ class TodoController extends GetxController {
      "userId":user.uid,
      "title":title,
      "description":desc,
-     "isPinned":isPinned
+     "isPinned":isPinned,
+     "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
+     "updatedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isAddingTodo.value=false;
     Get.rawSnackbar(title: "todo",message: "todo added successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
@@ -48,7 +51,8 @@ class TodoController extends GetxController {
    await ref.update({
      "title":todo['title'],
      "description":todo['description'],
-     "isPinned":todo['isPinned']
+     "isPinned":todo['isPinned'],
+     "updatedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isUpdatingTodo.value=false;
    Get.rawSnackbar(title: "update",message: "todo updated successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);

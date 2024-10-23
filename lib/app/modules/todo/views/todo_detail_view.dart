@@ -33,7 +33,17 @@ class TodoDetailView extends GetView<TodoController>{
         return  Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      const Text("UpdatedAt: ",style:TextStyle(fontSize: 12),),
+                      Text(todo['updatedAt'],style:const TextStyle(fontSize: 11),),
+                    ],
+                  ),
+                ),
                 Container(
                   width: Get.width,
                   padding: const EdgeInsets.all(10),

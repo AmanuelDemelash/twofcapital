@@ -122,7 +122,7 @@ class TodoView extends GetView<TodoController> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("3/4/2024",style: TextStyle(fontSize: 11),),
+                                        Text(todos[index]['createdAt'],style:const TextStyle(fontSize: 9),),
                                         Icon(Icons.more_vert,size: 15,)
                                       ],
                                     )
