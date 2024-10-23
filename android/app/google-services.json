@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "428961685781",
+    "project_id": "two-f-project-todo",
+    "storage_bucket": "two-f-project-todo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428961685781:android:4b8d4488a84f6d26f4c91c",
+        "android_client_info": {
+          "package_name": "com.twofcapital.twofcapital"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq9v7ybj90MFDeGiY1EsB_yk75gCYC_no"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
