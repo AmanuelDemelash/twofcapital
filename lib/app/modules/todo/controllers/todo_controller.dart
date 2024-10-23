@@ -9,6 +9,7 @@ import 'package:twofcapital/app/routes/app_pages.dart';
 import '../../../utils/colorConstant.dart';
 
 class TodoController extends GetxController {
+  Rx<DateTime> reminderTime=DateTime.now().obs;
   RxBool isGridView=true.obs;
   late User user;
   RxBool isAddingTodo=false.obs;
@@ -24,7 +25,7 @@ class TodoController extends GetxController {
     getTodos();
 
   }
- Future<void> addTodo(String title,String desc,bool isPinned)async{
+ Future<void> addTodo(String title,String desc,bool isPinned,DateTime reminder)async{
     isAddingTodo.value=true;
    DatabaseReference todoListRef = FirebaseDatabase.instance.ref("todos");
    DatabaseReference newTodoRef = todoListRef.push();
@@ -33,6 +34,7 @@ class TodoController extends GetxController {
      "title":title,
      "description":desc,
      "isPinned":isPinned,
+     "reminder":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder as DateTime),
      "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
      "updatedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });

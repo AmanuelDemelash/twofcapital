@@ -118,15 +118,27 @@ class TodoView extends GetView<TodoController> {
                                   children: [
                                     Text(todos[index]['title'],style:const TextStyle(fontSize: 15),),
                                     Text(todos[index]['description'],textAlign: TextAlign.start,style:const TextStyle(fontSize: 11)),
+                                    todos[index]['reminder']!=null?Container(
+                                      padding:const EdgeInsets.all(5),
+                                      margin:const EdgeInsets.only(top: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          border:Border.all(color: Colors.white.withOpacity(0.2))
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.watch_later_outlined,size: 12,),
+                                            Text(todos[index]['reminder']??"",style:const TextStyle(fontSize: 11),),
+                                          ],
+                                        )):const Text(""),
                                     Divider(color: Colors.white.withOpacity(0.2),),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(todos[index]['createdAt'],style:const TextStyle(fontSize: 9),),
                                         Icon(Icons.more_vert,size: 15,)
                                       ],
                                     )
-                        
+
                                   ],
                                 ),
                               ),
