@@ -78,7 +78,7 @@ class TodoDetailView extends GetView<TodoController>{
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      color:todo['color']!=0? Color((0xFF << 24) | (todo['color'] & 0x00FFFFFF)):CardTheme.of(context).color,
+                      color:todo['color']!=0? Color((0xFF << 24) | (todo['color'] & 0x00FFFFFF)).withOpacity(0.5):CardTheme.of(context).color,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.white.withOpacity(0.3))
                   ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:twofcapital/app/modules/chat/views/chat_view.dart';
-import 'package:twofcapital/app/modules/profile/views/profile_view.dart';
 import 'package:twofcapital/app/modules/todo/views/todo_view.dart';
 import 'package:twofcapital/app/utils/colorConstant.dart';
 import '../controllers/home_controller.dart';
@@ -19,7 +18,7 @@ class HomeView extends GetView<HomeController> {
           borderRadius: BorderRadius.circular(15)
         ),
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(100),
           child: NavigationBar(
             indicatorColor: ColorConstant.primaryColor,
               selectedIndex:controller.index.value,
@@ -31,7 +30,7 @@ class HomeView extends GetView<HomeController> {
               destinations:const [
             NavigationDestination(icon:Icon(Icons.next_plan), label:'Todo',),
             NavigationDestination(icon:Icon(Icons.chat), label:'Chat'),
-            NavigationDestination(icon:Icon(Icons.person), label:'Profile'),
+            // NavigationDestination(icon:Icon(Icons.person), label:'Profile'),
           ]),
         ),
       ),),
@@ -41,7 +40,7 @@ class HomeView extends GetView<HomeController> {
         children:const [
              TodoView(),
           ChatView(),
-          ProfileView()
+          // ProfileView()
         ],
       )
     );

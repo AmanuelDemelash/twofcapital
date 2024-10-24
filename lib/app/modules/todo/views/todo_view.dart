@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:twofcapital/app/modules/auth/views/sign_up_view.dart';
 import 'package:twofcapital/app/routes/app_pages.dart';
+import '../../../controllers/app_authentication_controller.dart';
 import '../controllers/todo_controller.dart';
 
 class TodoView extends GetView<TodoController> {
@@ -38,7 +39,7 @@ class TodoView extends GetView<TodoController> {
           const SizedBox(width: 10,),
         ],
       ),
-      drawer:const Drawer(),
+      drawer: AppDrawer(controller: controller),
       floatingActionButton: FloatingActionButton.extended(onPressed:() => Get.toNamed(Routes.ADDTODO),isExtended: true, label:const Text("Add"),icon:const Icon(Icons.add),),
       body: SafeArea(
         child:LayoutBuilder(builder:(context, constraints) {
@@ -109,7 +110,7 @@ class TodoView extends GetView<TodoController> {
                             ),
                              Card(
                               elevation: 0.8,
-                               color:todos[index]['color']!=0? Color((0xFF << 24) | (todos[index]['color'] & 0x00FFFFFF)):CardTheme.of(context).color,
+                               color:todos[index]['color']!=0? Color((0xFF << 24) | (todos[index]['color'] & 0x00FFFFFF)).withOpacity(0.6):CardTheme.of(context).color,
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration:BoxDecoration(
@@ -119,8 +120,8 @@ class TodoView extends GetView<TodoController> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(todos[index]['title'],style:const TextStyle(fontSize: 15),),
-                                    Text(todos[index]['description'],textAlign: TextAlign.start,style:const TextStyle(fontSize: 11)),
+                                    Text(todos[index]['title'],style:const TextStyle(fontSize: 18),),
+                                    Text(todos[index]['description'],textAlign: TextAlign.start,style:const TextStyle(fontSize:13)),
                                     todos[index]['reminder']!=null?Container(
                                       padding:const EdgeInsets.all(5),
                                       margin:const EdgeInsets.only(top: 10,bottom: 10),
@@ -168,6 +169,59 @@ class TodoView extends GetView<TodoController> {
         },)
 
       )
+    );
+  }
+}
+
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({
+    super.key,
+    required this.controller,
+  });
+
+  final TodoController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              color: CardTheme.of(context).color
+            ),
+            currentAccountPicture: CircleAvatar(
+              child:Text(controller.user.displayName!.toUpperCase().substring(0,1),) ,
+            ),
+            accountName:Text(controller.user.displayName!.toUpperCase(),),
+              accountEmail:Text(controller.user.email!),
+          ),
+          Container(
+            width: Get.width,
+            margin:const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                 height:Get.height/1.9
+                ),
+                SizedBox(
+                  width: Get.width,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          padding:const EdgeInsets.all(15)
+                      ),
+                      onPressed:() {
+                        Get.find<AppAuthenticationController>().logout();
+                      }, child:const Text("LogOut",style: TextStyle(color: Colors.white),)),
+                ),
+              ],
+            ),
+          )
+    
+        ],
+      ),
     );
   }
 }

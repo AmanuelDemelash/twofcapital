@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
+import 'package:twofcapital/app/modules/todo/controllers/todo_controller.dart';
+import 'package:twofcapital/app/modules/todo/views/todo_view.dart';
 import '../controllers/chat_controller.dart';
 
 class ChatView extends GetView<ChatController> {
@@ -10,15 +10,13 @@ class ChatView extends GetView<ChatController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ChatView'),
+        title: const Text('Chat'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'ChatView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      drawer: AppDrawer(controller: Get.find<TodoController>()),
+      body:SafeArea(child:LayoutBuilder(builder: (context, constraints) {
+        return Text("chat");
+      },))
     );
   }
 }
