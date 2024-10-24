@@ -10,11 +10,10 @@ class AddTodoView extends GetView<TodoController> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
-  late Color dialogSelectColor;
   @override
   Widget build(BuildContext context) {
     Get.put(TodoController());
-    dialogSelectColor = const Color(0xFFA239CA);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Todo'),
@@ -26,14 +25,14 @@ class AddTodoView extends GetView<TodoController> {
               key: _formKey,
               child: Column(
                 children: [
-                  Container(
+                 Obx(() =>Container(
                     width: Get.width,
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                      color: controller.dialogSelectColor.value.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(10),
-                        border:
-                            Border.all(color: Colors.white.withOpacity(0.3))),
+                        border:Border.all(color: Colors.white.withOpacity(0.3))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -111,18 +110,17 @@ class AddTodoView extends GetView<TodoController> {
                                   Icons.alarm,
                                   size: 16,
                                 )),
-                            ColorIndicator(
+                         ColorIndicator(
                               width: 20,
                               height:20,
                               borderRadius: 4,
                              selectedRequestsFocus: true,
-                             color:dialogSelectColor,
                               onSelectFocus: false,
                               onSelect: () async {
                                 // Store current color before we open the dialog.
                                 final Color newColor = await showColorPickerDialog(
                                   context,
-                                  dialogSelectColor,
+                                  controller.dialogSelectColor.value,
                                   title: Text('ColorPicker',
                                       style: Theme.of(context).textTheme.bodySmall),
                                   width: 40,
@@ -137,11 +135,6 @@ class AddTodoView extends GetView<TodoController> {
                                   pickersEnabled: <ColorPickerType, bool>{
                                     ColorPickerType.wheel: true,
                                   },
-                                  copyPasteBehavior: const ColorPickerCopyPasteBehavior(
-                                    copyButton: true,
-                                    pasteButton: true,
-                                    longPressMenu: true,
-                                  ),
                                   actionButtons: const ColorPickerActionButtons(
                                     okButton: true,
                                     closeButton: true,
@@ -150,16 +143,14 @@ class AddTodoView extends GetView<TodoController> {
                                   constraints: const BoxConstraints(
                                       minHeight: 480, minWidth: 320, maxWidth: 320),
                                 );
-                                dialogSelectColor=newColor;
-                                print(dialogSelectColor);
-
+                                controller.dialogSelectColor.value=newColor;
                               },
                             ),
                           ],
                         )
                       ],
                     ),
-                  ),
+                  ),),
                   Container(
                       margin: const EdgeInsets.all(10),
                       width: Get.width,

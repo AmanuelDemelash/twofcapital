@@ -1,4 +1,5 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -108,6 +109,7 @@ class TodoView extends GetView<TodoController> {
                             ),
                              Card(
                               elevation: 0.8,
+                               color:todos[index]['color']!=0? Color((0xFF << 24) | (todos[index]['color'] & 0x00FFFFFF)):CardTheme.of(context).color,
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration:BoxDecoration(

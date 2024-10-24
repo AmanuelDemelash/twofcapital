@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:twofcapital/app/modules/auth/views/sign_up_view.dart';
 import 'package:twofcapital/app/routes/app_pages.dart';
-
 import '../../../utils/colorConstant.dart';
 
 class TodoController extends GetxController {
+   Rx<Color> dialogSelectColor= const Color(0x00000000).obs;
   Rx<DateTime> reminderTime=DateTime.now().obs;
   RxBool isGridView=true.obs;
   late User user;
@@ -35,10 +35,13 @@ class TodoController extends GetxController {
      "description":desc,
      "isPinned":isPinned,
      "reminder":reminder==DateTime.now()?null: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder),
+     "color":dialogSelectColor.value.value,
      "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
      "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isAddingTodo.value=false;
+   dialogSelectColor.value=const Color(0x00000000);
+    Get.back();
     Get.rawSnackbar(title: "todo",message: "todo added successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
  }
  Future<void> getTodos()async{
@@ -58,6 +61,7 @@ class TodoController extends GetxController {
      "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isUpdatingTodo.value=false;
+   Get.back();
    Get.rawSnackbar(title: "update",message: "todo updated successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
 
  }
