@@ -88,7 +88,9 @@ class ChatDetailView extends GetView<ChatController> {
                                   mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(messages[index]['text'],
+                                   if(messages[index]['image']!='') Image.network( messages[index]['image']),
+                                    if(messages[index]['text']!='')
+                                   Text(messages[index]['text'],
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                     const SizedBox(height: 10,),
@@ -112,13 +114,13 @@ class ChatDetailView extends GetView<ChatController> {
                   Expanded(
                     child: TextFormField(
                       maxLines:null,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'write a message..',
-                        prefixIcon: Icon(Icons.attach_file,color: ColorConstant.primaryColor,),
-                        suffixIcon: Icon(Icons.keyboard_voice_rounded,color: ColorConstant.primaryColor,),
-                        contentPadding: EdgeInsets.symmetric(
+                        prefixIcon: IconButton(onPressed: () {controller.pickImage(user['chatRoom']);}, icon:const Icon(Icons.attach_file,color: ColorConstant.primaryColor,)),
+                        suffixIcon:IconButton(onPressed: () {}, icon:const Icon(Icons.keyboard_voice_rounded,color: ColorConstant.primaryColor,)),
+                        contentPadding:const EdgeInsets.symmetric(
                             horizontal: 16.0 * 1.5, vertical: 16.0),
-                        border: OutlineInputBorder(
+                        border:const OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius:
                           BorderRadius.all(Radius.circular(50)),
@@ -131,7 +133,7 @@ class ChatDetailView extends GetView<ChatController> {
                   ),
                   IconButton(onPressed: ()async {
                     if(messageController.text.isNotEmpty){
-                      controller.sendMessage(user['chatRoom'],messageController.text);
+                      controller.sendMessage(user['chatRoom'],message:messageController.text);
                       messageController.clear();
                     }
                   }, icon:const Icon(Icons.send,color: ColorConstant.primaryColor,))

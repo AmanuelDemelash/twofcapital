@@ -17,9 +17,10 @@ class AppAuthenticationController extends GetxController {
       if (user == null) {
         isLogin.value=false;
       } else {
-        _userRef = FirebaseDatabase.instance.ref('users/${_auth.currentUser !.uid}');
-        await online();
+        _userRef = FirebaseDatabase.instance.ref('users/${_auth.currentUser!.uid}');
         isLogin.value=true;
+        await online();
+
 
       }
     });
