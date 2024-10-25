@@ -9,7 +9,7 @@ import '../../../utils/colorConstant.dart';
 
 class TodoController extends GetxController {
    Rx<Color> dialogSelectColor= const Color(0x00000000).obs;
-  Rx<DateTime> reminderTime=DateTime.now().obs;
+ late Rx<DateTime> reminderTime=DateTime.now().obs;
   RxBool isGridView=true.obs;
   late User user;
   RxBool isAddingTodo=false.obs;
@@ -34,7 +34,7 @@ class TodoController extends GetxController {
      "title":title,
      "description":desc,
      "isPinned":isPinned,
-     "reminder":reminder==DateTime.now()?null: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder),
+     "reminder":reminder!=DateTime.now()? DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder):null,
      "color":dialogSelectColor.value.value,
      "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
      "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),

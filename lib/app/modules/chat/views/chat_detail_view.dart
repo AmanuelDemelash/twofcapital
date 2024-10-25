@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,9 @@ class ChatDetailView extends GetView<ChatController> {
    ChatDetailView({super.key});
      final user=Get.arguments;
      final TextEditingController messageController=TextEditingController();
-  @override
+    final ScrollController _scrollController = ScrollController();
+
+   @override
   Widget build(BuildContext context) {
      Get.put(ChatController());
     return Scaffold(
@@ -66,6 +69,7 @@ class ChatDetailView extends GetView<ChatController> {
                   messages=[];
                 }
                 return  ListView.builder(
+                  controller: _scrollController,
                     itemCount: messages.length,
                     itemBuilder: (context, index) =>
                         Row(mainAxisAlignment:messages[index]['senderId']!=controller.user.uid
@@ -88,13 +92,18 @@ class ChatDetailView extends GetView<ChatController> {
                                   mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                   if(messages[index]['image']!='') Image.network( messages[index]['image']),
+                                   if(messages[index]['image']!='')
+                                     CachedNetworkImage(
+                                       imageUrl:messages[index]['image'],
+                                       placeholder: (context, url) =>const Icon(Icons.image),
+                                       errorWidget: (context, url, error) => const Icon(Icons.error),
+                                     ),
                                     if(messages[index]['text']!='')
                                    Text(messages[index]['text'],
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                     const SizedBox(height: 10,),
-                                 //   Text(DateFormat("mm:ss a").format(DateTime(messages[index]['timestamp'])),style: const TextStyle(fontSize:11),)
+                                   Text(DateFormat("mm:ss a").format(DateTime(messages[index]['timestamp'])),style: const TextStyle(fontSize:11),)
                                   ],
                                 ),
                               ),
@@ -102,8 +111,17 @@ class ChatDetailView extends GetView<ChatController> {
                           ],
                         ));
               },),),
+           Obx(() => SizedBox(child:controller.isUploadingImage.value? const Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             crossAxisAlignment: CrossAxisAlignment.center,
+             children: [
+               AuthLoading(),
+               Text("sending image",style: TextStyle(fontSize: 11),)
+             ],
+           ):const SizedBox()),),
             Container(
               width: Get.width,
+              margin:const EdgeInsets.only(top: 10),
               padding:const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: CardTheme.of(context).color?.withOpacity(0.4),
@@ -135,6 +153,7 @@ class ChatDetailView extends GetView<ChatController> {
                     if(messageController.text.isNotEmpty){
                       controller.sendMessage(user['chatRoom'],message:messageController.text);
                       messageController.clear();
+                      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
                     }
                   }, icon:const Icon(Icons.send,color: ColorConstant.primaryColor,))
                 ],

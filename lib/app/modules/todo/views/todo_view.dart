@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:twofcapital/app/modules/auth/views/sign_up_view.dart';
 import 'package:twofcapital/app/routes/app_pages.dart';
+import 'package:twofcapital/app/utils/colorConstant.dart';
 import '../../../controllers/app_authentication_controller.dart';
 import '../controllers/todo_controller.dart';
 
@@ -40,7 +41,6 @@ class TodoView extends GetView<TodoController> {
         ],
       ),
       drawer: AppDrawer(controller: controller),
-      floatingActionButton: FloatingActionButton.extended(onPressed:() => Get.toNamed(Routes.ADDTODO),isExtended: true, label:const Text("Add"),icon:const Icon(Icons.add),),
       body: SafeArea(
         child:LayoutBuilder(builder:(context, constraints) {
          return Column(
@@ -55,6 +55,26 @@ class TodoView extends GetView<TodoController> {
                     Text(controller.user.displayName!.toUpperCase(),style: const TextStyle(fontSize: 24),),
                   ],
                 ),
+              ),
+              Container(
+                width: Get.width,
+                margin:const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                  GestureDetector(
+                    onTap:()=>Get.toNamed(Routes.ADDTODO),
+                    child: Container(
+                      width:100,
+                      padding:const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ColorConstant.primaryColor,
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child:const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.add),Text("Add")],),
+                    ),
+                  )
+                ],),
               ),
               Expanded(
                 child:StreamBuilder(stream:controller.todoRef.onValue, builder:(context, snapshot) {
@@ -83,7 +103,6 @@ class TodoView extends GetView<TodoController> {
                   }else{
                     todos=[];
                   }
-
                   return   Obx(() =>MasonryGridView.count(
                     padding: const EdgeInsets.all(10),
                     crossAxisCount:controller.isGridView.value? 2:1,

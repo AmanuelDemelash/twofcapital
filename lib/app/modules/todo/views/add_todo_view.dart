@@ -110,7 +110,7 @@ class AddTodoView extends GetView<TodoController> {
                                   Icons.alarm,
                                   size: 16,
                                 )),
-                         ColorIndicator(
+                          ColorIndicator(
                               width: 20,
                               height:20,
                               borderRadius: 4,

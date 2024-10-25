@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -17,6 +15,7 @@ class ChatController extends GetxController {
 
   RxString imageUrl="".obs;
   RxString audioUrl="".obs;
+  RxBool isUploadingImage=false.obs;
 
   final ImagePicker _picker = ImagePicker();
   late User user;
@@ -51,13 +50,16 @@ class ChatController extends GetxController {
       File file = File(pickedFile.path);
       String fileName = basename(file.path);
       try {
+        isUploadingImage.value=true;
         var reference =_storage.ref().child("images/$fileName");
         //Upload the file to firebase
         var uploadTask = reference.putFile(file);
         String url = await uploadTask.then((p0) => p0.ref.getDownloadURL());
         imageUrl.value=url;
+        isUploadingImage.value=false;
         await sendMessage(chatRoomId,image:imageUrl.value);
       } catch (e) {
+        isUploadingImage.value=false;
       }
     }
   }
