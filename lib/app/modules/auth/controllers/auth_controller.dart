@@ -32,7 +32,6 @@ class AuthController extends GetxController {
       Get.rawSnackbar(title: "error",message:e.code.toString(),margin:const EdgeInsets.all(15),backgroundColor:Colors.redAccent,borderRadius: 10);
 
     } catch (e) {
-      print(e);
       isSignIn.value=false;
     }
 
@@ -55,7 +54,9 @@ class AuthController extends GetxController {
           "uid":userId,
           "name":name,
           "email":email,
-          "phone":phone
+          "phone":phone,
+          "online":true,
+          'lastOnline': DateTime.now().millisecondsSinceEpoch
         });
         isSignUp.value=false;
         Get.rawSnackbar(title: "registration",message: "signup successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
@@ -68,7 +69,6 @@ class AuthController extends GetxController {
       Get.rawSnackbar(title: "error",message:e.code.toString(),margin:const EdgeInsets.all(15),backgroundColor:Colors.redAccent,borderRadius: 10);
 
     } catch (e) {
-      print(e);
       isSignUp.value=false;
     }
 

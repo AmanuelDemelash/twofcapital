@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:twofcapital/app/modules/chat/views/chat_detail_view.dart';
+import 'package:twofcapital/app/modules/chat/views/contacts_view.dart';
 import 'package:twofcapital/app/modules/todo/views/add_todo_view.dart';
 import 'package:twofcapital/app/modules/todo/views/todo_detail_view.dart';
 
@@ -31,8 +33,20 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CHAT,
-      page: () => const ChatView(),
+      page: () => ChatView(),
       binding: ChatBinding(),
+      children: [
+        GetPage(
+          name: _Paths.CHATDETAIL,
+          page: () =>  ChatDetailView(),
+          binding: ChatBinding(),
+        ),
+        GetPage(
+          name: _Paths.CONTACTS,
+          page: () =>  ContactsView(),
+          binding: ChatBinding(),
+        ),
+      ]
     ),
     GetPage(
         name: _Paths.AUTH,

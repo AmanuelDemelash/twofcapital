@@ -37,7 +37,7 @@ class HomeView extends GetView<HomeController> {
       body:PageView(
         controller:pageController,
         physics:const NeverScrollableScrollPhysics(),
-        children:const [
+        children: [
              TodoView(),
           ChatView(),
           // ProfileView()

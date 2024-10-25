@@ -203,7 +203,7 @@ class AppDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                 height:Get.height/1.9
+                 height:Get.height/1.9,
                 ),
                 SizedBox(
                   width: Get.width,
