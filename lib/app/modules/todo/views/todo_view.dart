@@ -1,5 +1,4 @@
 import 'package:avatar_stack/avatar_stack.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -31,9 +30,6 @@ class TodoView extends GetView<TodoController> {
           keyboardType: TextInputType.emailAddress,
         ),
         actions: [
-         Obx(() =>IconButton(onPressed:() {
-           controller.isGridView.value=!controller.isGridView.value;
-          }, icon:!controller.isGridView.value?const Icon(Icons.grid_view):const Icon(Icons.align_horizontal_left)),),
            CircleAvatar(
             child: Text(controller.user.displayName!.substring(0,2).toUpperCase()),
           ),
@@ -62,6 +58,9 @@ class TodoView extends GetView<TodoController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Obx(() =>IconButton(onPressed:() {
+                      controller.isGridView.value=!controller.isGridView.value;
+                    }, icon:!controller.isGridView.value?const Icon(Icons.grid_view):const Icon(Icons.align_horizontal_left)),),
                   GestureDetector(
                     onTap:()=>Get.toNamed(Routes.ADDTODO),
                     child: Container(
@@ -89,7 +88,7 @@ class TodoView extends GetView<TodoController> {
                   if (!snapshot.hasData || snapshot.data==null || snapshot.data!.snapshot.value==null) {
                     return const Center(child: Text('No todos found.')); // Show no data message
                   }
-                  List<Map<dynamic, dynamic>> todos;
+                  List<Map<dynamic, dynamic>>? todos;
                   if (snapshot.data != null && snapshot.data!.snapshot.value != null) {
                     Map<dynamic, dynamic> data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
                     todos = data.entries
@@ -97,6 +96,7 @@ class TodoView extends GetView<TodoController> {
                       'id': entry.key,
                       ...entry.value as Map<dynamic, dynamic>,
                     }).toList()??[];
+                    todos.where((element) => element['userId']==controller.user.uid || (element['collaborators']as Map).containsKey(controller.user.uid),);
                     List<Map> pinnedTodos = todos.where((todo) => todo['isPinned'] ?? false).toList();
                     List<Map> unpinnedTodos = todos.where((todo) => !(todo['isPinned'] ?? false)).toList();
                     todos = pinnedTodos + unpinnedTodos;
@@ -108,10 +108,11 @@ class TodoView extends GetView<TodoController> {
                     crossAxisCount:controller.isGridView.value? 2:1,
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4,
-                    itemCount:todos.length ,
+                    itemCount:todos!.length,
                     itemBuilder: (context, index) {
+                      final collab=todos![index]['collaborators'] as Map<dynamic,dynamic>;
                       return GestureDetector(
-                        onTap: () => Get.toNamed(Routes.TODODETAIL,arguments: todos[index]),
+                        onTap: () => Get.toNamed(Routes.TODODETAIL,arguments: todos![index]),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -154,20 +155,18 @@ class TodoView extends GetView<TodoController> {
                                             Text(todos[index]['reminder'].toString().substring(12),style:const TextStyle(fontSize: 11),),
                                           ],
                                         )):const Text(""),
-                                  
-                                    const Row(
+                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         AvatarStack(
                                           width: 43,
                                           height:30,
-                                          avatars: [
-                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
-                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
-                                              NetworkImage('https://i.pravatar.cc/150?img=1'),
-                                          ],
+                                          avatars:List.generate(collab.keys.toList().length, (index) {
+                                          return  NetworkImage('https://i.pravatar.cc/150?img=1');
+                                          },),
                                         ),
                                       ],
+
                                     )
 
                                   ],

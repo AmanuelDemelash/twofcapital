@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:twofcapital/app/modules/chat/controllers/chat_controller.dart';
 import 'package:twofcapital/app/utils/colorConstant.dart';
-
-import '../../../routes/app_pages.dart';
 import '../../auth/views/sign_up_view.dart';
 
 class ContactsView extends GetView<ChatController> {

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:twofcapital/app/modules/chat/views/chat_detail_view.dart';
 import 'package:twofcapital/app/modules/chat/views/contacts_view.dart';
+import 'package:twofcapital/app/modules/chat/views/group_chat_detail_view.dart';
 import 'package:twofcapital/app/modules/todo/views/add_todo_view.dart';
 import 'package:twofcapital/app/modules/todo/views/todo_detail_view.dart';
 
@@ -12,8 +13,6 @@ import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
-import '../modules/profile/bindings/profile_binding.dart';
-import '../modules/profile/views/profile_view.dart';
 import '../modules/todo/bindings/todo_binding.dart';
 import '../modules/todo/views/todo_view.dart';
 
@@ -42,6 +41,11 @@ class AppPages {
           binding: ChatBinding(),
         ),
         GetPage(
+          name: _Paths.GROUPCHATDETAIL,
+          page: () =>  GroupChatDetailView(),
+          binding: ChatBinding(),
+        ),
+        GetPage(
           name: _Paths.CONTACTS,
           page: () =>  ContactsView(),
           binding: ChatBinding(),
@@ -64,11 +68,6 @@ class AppPages {
             binding: AuthBinding(),
           ),
         ]),
-    GetPage(
-      name: _Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding(),
-    ),
     GetPage(
       name: _Paths.TODO,
       page: () => const TodoView(),

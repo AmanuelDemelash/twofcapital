@@ -25,7 +25,38 @@ class ChatView extends GetView<ChatController> {
               PopupMenuItem(child:const Text("Contacts"),onTap: () {
                 Get.toNamed(Routes.CONTACTS);
               },),
-              PopupMenuItem(child:const Text("Create Group"),onTap: () {},),
+              PopupMenuItem(child:const Text("Create Group"),onTap: () {
+                Get.defaultDialog(title: "Create Group",
+                    contentPadding:const  EdgeInsets.all(10),
+                    content: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'enter group name',
+                        label: Text("Group name"),
+                        hintStyle: TextStyle(color:Colors.white),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.0 * 1.5, vertical: 16.0),
+                      
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller:controller.groupNameController,
+                      style:const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 15,),
+                    SizedBox(
+                      width: Get.width,
+                      child:Obx(()=>ElevatedButton(onPressed: () {
+                        if(controller.groupNameController.text.isNotEmpty){
+                          controller.createGroup();
+                        }
+                      },
+                          child:controller.isCreateGroup.value?const AuthLoading():const Text("create")),
+                    ))
+
+                  ],
+                ));
+              },),
             ],)
           ],
           bottom: const TabBar(tabs: [
@@ -98,7 +129,7 @@ class ChatView extends GetView<ChatController> {
             },),
               // group
               LayoutBuilder(builder: (context, constraints) {
-                return StreamBuilder(stream: controller.groupRef.onValue, builder:(context, snapshot) {
+                return StreamBuilder(stream: controller.groupsRef.onValue, builder:(context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child:AuthLoading());
                   }
@@ -109,37 +140,37 @@ class ChatView extends GetView<ChatController> {
                   // Check if data is available
                   if (!snapshot.hasData || snapshot.data==null || snapshot.data!.snapshot.value==null) {
                     return  const Center(child:
-                        Text('No group found.'),
+                        Text('No group found.you can create your group'),
                     ); // Show no data message
                   }
-                  List<Map<dynamic, dynamic>> chats;
+                  List<Map<dynamic, dynamic>> groups;
                   if (snapshot.data != null && snapshot.data!.snapshot.value != null) {
                     Map<dynamic, dynamic> data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-                    chats = data.entries
+                    groups = data.entries
                         .map((entry) => {
                       'id': entry.key,
                       ...entry.value as Map<dynamic, dynamic>,
                     }).toList()??[];
                   }else{
-                    chats=[];
+                    groups=[];
                   }
-                  return  ListView.builder(itemBuilder: (context, index) {
+                  return  ListView.builder(
+                    itemCount: groups.length,
+                    itemBuilder: (context, index) {
                     return ListTile(
-                      onTap: () => Get.toNamed(Routes.CHATDETAIL),
-                      leading: const Badge(
-                        padding: EdgeInsets.only(right: 20),
-                        alignment: AlignmentDirectional.bottomEnd,
-                        smallSize:14,
-                        child: CircleAvatar(
+                      onTap: () => Get.toNamed(Routes.GROUPCHATDETAIL,arguments: groups[index]),
+                      leading:CircleAvatar(
                           radius: 30,
+                        child:  Text(groups[index]['name'].toString().substring(0,2)),
                         ),
-                      ),
-                      subtitle: Text("Bob says Hi",style:  TextStyle(color: Colors.white.withOpacity(0.5)),),
-                      title: const Row(
+                      subtitle: Text(DateFormat("mm:ss a").format(
+                      DateTime( groups[index]['createdAt'])
+                      ) ,style:  TextStyle(color: Colors.white.withOpacity(0.5)),),
+                      title: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(Icons.group,size: 17,),
-                          Text("user name"),
+                         const Icon(Icons.group,size: 17,),const SizedBox(width: 8,),
+                          Text(groups[index]['name']),
                         ],
                       ),
                     );

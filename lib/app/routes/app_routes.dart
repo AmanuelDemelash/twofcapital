@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const CHAT = _Paths.CHAT;
   static const CHATDETAIL = _Paths.CHAT + _Paths.CHATDETAIL;
+  static const GROUPCHATDETAIL = _Paths.CHAT + _Paths.GROUPCHATDETAIL;
   static const CONTACTS = _Paths.CHAT + _Paths.CONTACTS;
   static const AUTH = _Paths.AUTH;
   static const SIGNUP = _Paths.AUTH + _Paths.SIGNUP;
@@ -21,6 +22,7 @@ abstract class _Paths {
   static const HOME = '/home';
   static const CHAT = '/chat';
   static const CHATDETAIL = '/chatdetail';
+  static const GROUPCHATDETAIL = '/groupchatdetail';
   static const CONTACTS = '/contacts';
   static const AUTH = '/auth';
   static const SIGNUP = '/signup';

@@ -17,13 +17,13 @@ class TodoController extends GetxController {
   RxBool isTodoPinned=false.obs;
   RxBool isUpdatingTodo=false.obs;
   DatabaseReference todoRef = FirebaseDatabase.instance.ref('todos');
-  @override
+   DatabaseReference userRef = FirebaseDatabase.instance.ref('users');
+
+   @override
   void onInit() {
     super.onInit();
     final currentUser = FirebaseAuth.instance.currentUser;
     user=currentUser!;
-    getTodos();
-
   }
  Future<void> addTodo(String title,String desc,bool isPinned,DateTime reminder)async{
     isAddingTodo.value=true;
@@ -36,6 +36,9 @@ class TodoController extends GetxController {
      "isPinned":isPinned,
      "reminder":reminder!=DateTime.now()? DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder):null,
      "color":dialogSelectColor.value.value,
+     "collaborators": {
+       user.uid: true, // Add the creator as a collaborator
+     },
      "createdAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
      "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
@@ -44,12 +47,6 @@ class TodoController extends GetxController {
     Get.back();
     Get.rawSnackbar(title: "todo",message: "todo added successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
  }
- Future<void> getTodos()async{
-   todoRef.onValue.listen((DatabaseEvent event) {
-     final data = event.snapshot.value;
-   });
- }
-
  Future<void> updateTodo(Map<dynamic,dynamic> todo,DateTime updatedReminder)async{
    isUpdatingTodo.value=true;
    DatabaseReference ref = FirebaseDatabase.instance.ref("todos/${todo['id']}");
@@ -72,11 +69,16 @@ class TodoController extends GetxController {
     Get.back();
     Get.offAllNamed(Routes.HOME);
  }
-  @override
+ Future<void> addCollaborator(String todoId, String userId) async {
+     final todoRef = FirebaseDatabase.instance.ref().child('todos/$todoId/collaborators');
+     await todoRef.child(userId).set(true); // Add the user as a collaborator
+   Get.back();
+   }
+
+   @override
   void onReady() {
     super.onReady();
   }
-
   @override
   void onClose() {
     super.onClose();

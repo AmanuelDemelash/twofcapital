@@ -12,14 +12,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     return Scaffold(
-      bottomNavigationBar:Obx(() =>Container(
-        margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15)
-        ),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-          child: NavigationBar(
+      bottomNavigationBar:Obx(() => NavigationBar(
             indicatorColor: ColorConstant.primaryColor,
               selectedIndex:controller.index.value,
               onDestinationSelected: (value){
@@ -31,14 +24,13 @@ class HomeView extends GetView<HomeController> {
             NavigationDestination(icon:Icon(Icons.next_plan), label:'Todo',),
             NavigationDestination(icon:Icon(Icons.chat), label:'Chat'),
             // NavigationDestination(icon:Icon(Icons.person), label:'Profile'),
-          ]),
-        ),
-      ),),
+          ])
+      ,),
       body:PageView(
         controller:pageController,
         physics:const NeverScrollableScrollPhysics(),
         children: [
-             TodoView(),
+          TodoView(),
           ChatView(),
           // ProfileView()
         ],

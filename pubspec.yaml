@@ -49,6 +49,11 @@ dependencies:
   firebase_storage: ^12.3.4
   path: ^1.9.0
   cached_network_image: ^3.4.1
+  record: ^5.1.2
+  just_audio: ^0.9.41
+  path_provider: ^2.1.4
+  avatar_glow: ^3.0.1
+  audio_waveforms: ^1.1.1
 
 dev_dependencies:
   flutter_test:
