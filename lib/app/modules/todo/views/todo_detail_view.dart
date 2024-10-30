@@ -47,8 +47,7 @@ class TodoDetailView extends GetView<TodoController>{
                       pickedTime.hour,
                       pickedTime.minute,
                     );
-                    controller.reminderTime.value =
-                        selectedDateTime;
+                    controller.reminderTime.value=selectedDateTime;
                   }
                 }
               },
@@ -120,85 +119,90 @@ class TodoDetailView extends GetView<TodoController>{
               )
             );
           } , icon: const Icon(Icons.groups)),
-          IconButton(onPressed:(){controller.deleteTodo(todo);} , icon:const Icon(Icons.delete)),
+          IconButton(onPressed:(){controller.deleteTodo(todo['id']);} , icon:const Icon(Icons.delete)),
         ],
       ),
       body:SafeArea(child:LayoutBuilder(builder: (context, constraints) {
-        return  Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: [
-                      const Text("EditedAt: ",style:TextStyle(fontSize: 12),),
-                      Text(todo['editedAt'],style:const TextStyle(fontSize: 11),),
-                    ],
+        return  SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      children: [
+                        const Text("EditedAt: ",style:TextStyle(fontSize: 12),),
+                        Text(todo['editedAt'],style:const TextStyle(fontSize: 11),),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  width: Get.width,
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color:todo['color']!=0? Color((0xFF << 24) | (todo['color'] & 0x00FFFFFF)).withOpacity(0.5):CardTheme.of(context).color,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white.withOpacity(0.3))
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                              decoration: const InputDecoration(
-                                hintText: 'Title',
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16.0 * 1.5, vertical: 16.0),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                                ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              controller: _titleController,
-                            ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'take a note...',
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.0 * 1.5, vertical: 16.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(50)),
-                          ),
-                        ),
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        controller: _descController,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    margin:const EdgeInsets.all(10),
+                  Container(
                     width: Get.width,
-                    child:Obx(() =>ElevatedButton(onPressed: () {
-                      _formKey.currentState!.save();
-                      if(_titleController.text.isEmpty && _descController.text.isEmpty){
-                      }else{
-                        todo['title']=_titleController.text;
-                        todo['description']=_descController.text;
-                        todo['isPinned']=controller.isTodoPinned.value;
-                        controller.updateTodo(todo,controller.reminderTime.value);
-                      }
-                    },
-                        style: ElevatedButton.styleFrom(padding:const EdgeInsets.all(16)),
-                        child:controller.isUpdatingTodo.value?const AuthLoading(): const Text("Save")),
-                    ))
-              ],)
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color:todo['color']!=0? Color((0xFF << 24) | (todo['color'] & 0x00FFFFFF)).withOpacity(0.5):CardTheme.of(context).color,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white.withOpacity(0.3))
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                                decoration: const InputDecoration(
+                                  hintText: 'Title',
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 16.0 * 1.5, vertical: 16.0),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.text,
+                                controller: _titleController,
+                              ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'take a note...',
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.0 * 1.5, vertical: 16.0),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: _descController,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                      margin:const EdgeInsets.all(10),
+                      width: Get.width,
+                      child:Obx(() =>ElevatedButton(onPressed: () {
+                      //  _formKey.currentState!.save();
+                            Map<String,dynamic> todoUpdate={
+                              'id':todo['id'],
+                              'title':_titleController.text,
+                              'description':_descController.text,
+                              'isPinned':controller.isTodoPinned.value,
+                              'reminder':todo['reminder']
+                            };
+                            print(todoUpdate);
+                          controller.updateTodo(todoUpdate,controller.reminderTime.value);
+
+                      },
+                          style: ElevatedButton.styleFrom(padding:const EdgeInsets.all(18)),
+                          child:controller.isUpdatingTodo.value?const AuthLoading(): const Text("Save")),
+                      ))
+                ],)
+          ),
         );
       },))
     );

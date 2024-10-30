@@ -242,7 +242,7 @@ class ChatDetailView extends GetView<ChatController> {
                     children: [
                       IconButton(
                           onPressed: () {
-                            controller.pickImage(user['chatRoom'],isGroup: false);
+                            controller.pickImage(user['chatRoom'],false);
                           },
                           icon: const Icon(
                             Icons.attach_file,
@@ -255,7 +255,7 @@ class ChatDetailView extends GetView<ChatController> {
                             hintText: 'write a message..',
                             suffixIcon: Obx(() => GestureDetector(
                                 onTap: () {
-                                  controller.startRecording(user['chatRoom']);
+                                  controller.startRecording(user['chatRoom'],false);
                                 },
                                 child: controller.isRecordingAudio.value
                                     ? AvatarGlow(

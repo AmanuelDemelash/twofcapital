@@ -90,16 +90,27 @@ class TodoView extends GetView<TodoController> {
                   }
                   List<Map<dynamic, dynamic>>? todos;
                   if (snapshot.data != null && snapshot.data!.snapshot.value != null) {
-                    Map<dynamic, dynamic> data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-                    todos = data.entries
+                    todos =(snapshot.data!.snapshot.value as Map).entries
                         .map((entry) => {
                       'id': entry.key,
                       ...entry.value as Map<dynamic, dynamic>,
-                    }).toList()??[];
-                    todos.where((element) => element['userId']==controller.user.uid || (element['collaborators']as Map).containsKey(controller.user.uid),);
-                    List<Map> pinnedTodos = todos.where((todo) => todo['isPinned'] ?? false).toList();
-                    List<Map> unpinnedTodos = todos.where((todo) => !(todo['isPinned'] ?? false)).toList();
-                    todos = pinnedTodos + unpinnedTodos;
+                    }).toList();
+                  todos=todos.where((element) => element['ownerId']==controller.user.uid ||  (element['collaborators'] as Map?)?.containsKey(controller.user.uid) == true).toList().where((todo) => todo != null).cast<Map>().toList() ..sort((a, b) {
+                    return (b['isPinned'] ? 1 : 0).compareTo(a['isPinned'] ? 1 : 0);
+                  });
+
+
+
+                    // Map<dynamic, dynamic> data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+                    // todos = data.entries
+                    //     .map((entry) => {
+                    //   'id': entry.key,
+                    //   ...entry.value as Map<dynamic, dynamic>,
+                    // }).toList()??[];
+                    // todos.where((element) => element['userId']==controller.user.uid || (element['collaborators']as Map).containsKey(controller.user.uid),);
+                    // List<Map> pinnedTodos = todos.where((todo) => todo['isPinned'] ?? false).toList();
+                    // List<Map> unpinnedTodos = todos.where((todo) => !(todo['isPinned'] ?? false)).toList();
+                    // todos = pinnedTodos + unpinnedTodos;
                   }else{
                     todos=[];
                   }
@@ -108,7 +119,7 @@ class TodoView extends GetView<TodoController> {
                     crossAxisCount:controller.isGridView.value? 2:1,
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4,
-                    itemCount:todos!.length,
+                    itemCount:todos?.length,
                     itemBuilder: (context, index) {
                       final collab=todos![index]['collaborators'] as Map<dynamic,dynamic>;
                       return GestureDetector(

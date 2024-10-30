@@ -132,8 +132,7 @@ class GroupChatDetailView extends GetView<ChatController> {
                                             const Duration(
                                                 milliseconds:
                                                 1000),
-                                            glowColor: ColorConstant
-                                                .primaryColor,
+                                            glowColor: Colors.redAccent,
                                             glowShape:
                                             BoxShape.circle,
                                             curve:
@@ -202,7 +201,7 @@ class GroupChatDetailView extends GetView<ChatController> {
                 children: [
                   IconButton(
                       onPressed: () {
-                       controller.pickImage(group['id'],isGroup: true);
+                       controller.pickImage(group['id'],true);
                       },
                       icon: const Icon(
                         Icons.attach_file,
@@ -215,7 +214,7 @@ class GroupChatDetailView extends GetView<ChatController> {
                         hintText: 'write a message..',
                         suffixIcon: Obx(() => GestureDetector(
                             onTap: () {
-                             controller.startRecording(group['id'],isGroup: true);
+                             controller.startRecording(group['id'],true);
                             },
                             child: controller.isRecordingAudio.value
                                 ? AvatarGlow(

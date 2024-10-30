@@ -9,7 +9,7 @@ import '../../../utils/colorConstant.dart';
 
 class TodoController extends GetxController {
    Rx<Color> dialogSelectColor= const Color(0x00000000).obs;
- late Rx<DateTime> reminderTime=DateTime.now().obs;
+   Rx<DateTime> reminderTime=DateTime.now().obs;
   RxBool isGridView=true.obs;
   late User user;
   RxBool isAddingTodo=false.obs;
@@ -25,7 +25,7 @@ class TodoController extends GetxController {
     final currentUser = FirebaseAuth.instance.currentUser;
     user=currentUser!;
   }
- Future<void> addTodo(String title,String desc,bool isPinned,DateTime reminder)async{
+ Future<void> addTodo(String title,String desc,bool isPinned,DateTime? reminder)async{
     isAddingTodo.value=true;
    DatabaseReference todoListRef = FirebaseDatabase.instance.ref("todos");
    DatabaseReference newTodoRef = todoListRef.push();
@@ -34,7 +34,7 @@ class TodoController extends GetxController {
      "title":title,
      "description":desc,
      "isPinned":isPinned,
-     "reminder":reminder!=DateTime.now()? DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder):null,
+     "reminder":reminderTime.value!=DateTime.now()? DateFormat("yyyy-MM-dd-hh:mm:ss a").format(reminder!):null,
      "color":dialogSelectColor.value.value,
      "collaborators": {
        user.uid: true, // Add the creator as a collaborator
@@ -47,14 +47,14 @@ class TodoController extends GetxController {
     Get.back();
     Get.rawSnackbar(title: "todo",message: "todo added successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
  }
- Future<void> updateTodo(Map<dynamic,dynamic> todo,DateTime updatedReminder)async{
+ Future<void> updateTodo(Map<String,dynamic> todo, updatedReminder)async{
    isUpdatingTodo.value=true;
-   DatabaseReference ref = FirebaseDatabase.instance.ref("todos/${todo['id']}");
+   DatabaseReference ref =FirebaseDatabase.instance.ref("todos/${todo['id']}");
    await ref.update({
      "title":todo['title'],
      "description":todo['description'],
      "isPinned":todo['isPinned'],
-     "reminder":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(updatedReminder)==todo['reminder']?null: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(updatedReminder),
+     "reminder":  updatedReminder==null? todo['reminder']: DateFormat("yyyy-MM-dd-hh:mm:ss a").format(updatedReminder),
      "editedAt":DateFormat("yyyy-MM-dd-hh:mm:ss a").format(DateTime.now()),
    });
    isUpdatingTodo.value=false;
@@ -62,8 +62,8 @@ class TodoController extends GetxController {
    Get.rawSnackbar(title: "update",message: "todo updated successfully",margin:const EdgeInsets.all(15),backgroundColor:ColorConstant.primaryColor,borderRadius:10);
 
  }
- Future<void> deleteTodo(Map<dynamic,dynamic> todo)async{
-   DatabaseReference ref = FirebaseDatabase.instance.ref("todos/${todo['id']}");
+ Future<void> deleteTodo(String todoId)async{
+   DatabaseReference ref = FirebaseDatabase.instance.ref("todos/$todoId");
    Get.dialog(const AlertDialog(title: AuthLoading(),));
    await ref.remove();
     Get.back();

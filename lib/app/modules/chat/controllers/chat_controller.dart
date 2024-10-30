@@ -54,7 +54,9 @@ class ChatController extends GetxController {
         ? '${user1}_$user2'
         : '${user2}_$user1';
   }
-  Future<void> pickImage(String chatRoomId,{bool? isGroup}) async {
+
+  Future<void> pickImage(String chatRoomId,bool isGroup) async {
+    print(isGroup);
     final  XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       File file = File(pickedFile.path);
@@ -67,17 +69,18 @@ class ChatController extends GetxController {
         String url = await uploadTask.then((p0) => p0.ref.getDownloadURL());
         imageUrl.value=url;
         isUploadingImage.value=false;
-        if(isGroup!){
+        if(isGroup==true){
           await sendGroupMessage(chatRoomId,image: imageUrl.value);
         }else{
-          await sendGroupMessage(chatRoomId,image:imageUrl.value);
+          print("object");
+          await sendMessage(chatRoomId,image:imageUrl.value);
         }
       } catch (e) {
         isUploadingImage.value=false;
       }
-    }
+   }
   }
-  Future<void> startRecording(String chatRoomId,{bool? isGroup}) async {
+  Future<void> startRecording(String chatRoomId,bool isGroup) async {
     if(isRecordingAudio.value){
      String? filePath= await audioRecorder.stop();
      if(filePath!=null){
@@ -91,10 +94,10 @@ class ChatController extends GetxController {
          String url= await uploadTask.then((p0) => p0.ref.getDownloadURL(),);
          audioUrl.value=url;
          isUploadingImage.value=false;
-         if(isGroup!){
+         if(isGroup==true){
            await sendGroupMessage(chatRoomId,audio: audioUrl.value);
          }else{
-           await sendGroupMessage(chatRoomId,audio: audioUrl.value);
+           await sendMessage(chatRoomId,audio: audioUrl.value);
          }
          filePath=null;
 
