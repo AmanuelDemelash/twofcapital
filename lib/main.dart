@@ -7,6 +7,7 @@ import 'package:twofcapital/app/theme/themeData.dart';
 import 'package:twofcapital/firebase_options.dart';
 import 'package:workmanager/workmanager.dart';
 import 'app/routes/app_pages.dart';
+import 'app/service/localNotificationService.dart';
 
 const checkNewMessagesTask = "checkNewMessagesTask"; // Task name
 
@@ -20,17 +21,21 @@ void callbackDispatcher() {
 
 Future<void> checkForNewMessages() async {
   final database = FirebaseDatabase.instance.ref("chats");
-  // Query for unread messages (modify based on your data structure)
-  final snapshot = await database.orderByChild('isRead').equalTo(false).get();
+  // Listen for new chat messages added to the "chats" reference
+  database.onChildAdded.listen((event) {
+    if (event.snapshot.exists) {
+      final newMessage = event.snapshot.value as Map<dynamic, dynamic>;
+      final messageText = newMessage['message'] ?? 'You have a new message!';
 
-  if (snapshot.exists) {
-    // LocalNotificationService.showNotification(
-    //   title: "New Message",
-    //   body: "You have a new message!",
-    // );
-  } else {
-    print("No new messages found.");
-  }
+      // Show a notification for the new message
+      LocalNotificationService.showNotification(
+        title: "New Message",
+        body: messageText,
+      );
+
+      print("New message received: $messageText");
+    }
+  });
 }
 
 
@@ -46,8 +51,11 @@ void main() async{
   Workmanager().registerPeriodicTask(
     "1", // Unique task name
     checkNewMessagesTask,
-    frequency: const Duration(minutes:1),
+    frequency: const Duration(minutes:2),
   );
+  // Initialize the local notification service
+  LocalNotificationService.initialize();
+
   runApp(
     Obx(() => GetMaterialApp(
       debugShowCheckedModeBanner: false,
