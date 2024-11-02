@@ -228,24 +228,24 @@ class AppDrawer extends StatelessWidget {
           Container(
             width: Get.width,
             margin:const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                 height:Get.height/1.9,
-                ),
-                SizedBox(
-                  width: Get.width,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          padding:const EdgeInsets.all(15)
-                      ),
-                      onPressed:() {
-                        Get.find<AppAuthenticationController>().logout();
-                      }, child:const Text("LogOut",style: TextStyle(color: Colors.white),)),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                  SizedBox(
+                    width: Get.width,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            padding:const EdgeInsets.all(15)
+                        ),
+                        onPressed:() {
+                          Get.find<AppAuthenticationController>().logout();
+                        }, child:const Text("LogOut",style: TextStyle(color: Colors.white),)),
+                  ),
+                ],
+              ),
             ),
           )
     

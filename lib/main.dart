@@ -32,7 +32,6 @@ Future<void> checkForNewMessages() async {
         title: "New Message",
         body: messageText,
       );
-
       print("New message received: $messageText");
     }
   });
